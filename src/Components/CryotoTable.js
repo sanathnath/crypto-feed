@@ -1,4 +1,4 @@
-import { LinearProgress, Container, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
+import { LinearProgress, Container, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, Tooltip } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
@@ -43,23 +43,12 @@ const useStyles = makeStyles(()=>({
 }))
 
 function CryotoTable() {
-    const [loading, setLoading] = useState(false);
-    const [coins, setCoins] = useState([]);
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const navigate = useNavigate();
-    const { currency,symbol } = CryptoState();
+    const { currency, symbol, coins, loading, getCoins } = CryptoState();
     const classes = useStyles();
 
-    const getCoins = async() => {
-        setLoading(true);
-        const data = await axios.get(CoinList(currency)).then((res)=>{
-            return res.data;
-        });
-        console.log(data);
-        setCoins(data);
-        setLoading(false);
-    }
     const handleChange = (event, value) => {
       setPage(value);
     };
@@ -72,6 +61,7 @@ function CryotoTable() {
     const numberWithComas = (x)=>{
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
     }
+    
     useEffect(() => {
       getCoins();
     }, [currency])

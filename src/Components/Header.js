@@ -2,6 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Container, makeStyles, MenuItem, Select, Toolbar, Typography } from '@material-ui/core'
 import { CryptoState } from '../CryptoContext';
+import AuthForm from './Authentication/AuthForm';
+import UserSideBar from './Authentication/UserSideBar';
 
 
 const useStyles = makeStyles(()=>({
@@ -22,13 +24,14 @@ const useStyles = makeStyles(()=>({
 function Header() {
     const navigate = useNavigate();
     const classes = useStyles();
-    const {currency, setCurrency} = CryptoState();
+    const {currency, setCurrency, user} = CryptoState();
     
     const handleSelect = (event)=>{
         setCurrency(event.target.value)
     }
   return (
-    <AppBar color="transparent" position='static'>
+    <AppBar position="sticky"
+    style={{ background: 'whitesmoke' }}>
         <Container>
             <Toolbar>
             <Typography className={classes.title}
@@ -43,6 +46,7 @@ function Header() {
                 <MenuItem value={"USD"}>USD</MenuItem>
                 <MenuItem value={"INR"}>INR</MenuItem>
             </Select>
+            { user ? <UserSideBar /> : <AuthForm />}
             </Toolbar>
         </Container>
     </AppBar>
